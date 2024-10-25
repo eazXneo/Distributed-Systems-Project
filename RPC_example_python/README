@@ -1,0 +1,53 @@
+# Add Example: Python with gRPC
+
+### gRPC is a RPC framework that helps generate client and server code from protocol buffer (.proto) files in multiple languages, including Python.
+
+we'll create a simple add functino using gRPC, similar to the class example using `rpcgen` for C.
+
+---
+
+#### **Step 0**
+
+```
+pip install grpcio grpcio-tools
+```
+
+#### **Step 1: define service and data structure**
+Create a file named `add_service.proto` to define the RPC function and the necessary data structures.
+
+```protobuf
+// add_service.proto
+syntax = "proto3";
+package addservice;
+
+service AddService {
+  rpc Add (AddRequest) returns (AddResponse);
+}
+
+message AddRequest {
+  int32 a = 1;
+  int32 b = 2;
+}
+
+message AddResponse {
+  int32 result = 1;
+}
+
+```
+
+#### **Step 2: generate client and server stubs**
+
+```bash
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. add_service.proto
+```
+
+#### **Step 3: write server and client codes using the stubs**
+
+Please refer to `server.py` and `client.py`
+
+#### **Step 4**
+
+```bash
+python server.py
+python client.py 5 5
+```
