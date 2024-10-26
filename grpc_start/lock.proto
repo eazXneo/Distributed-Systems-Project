@@ -2,6 +2,19 @@ syntax = "proto3";
 
 package lock_service;
 
+service LockService {
+    rpc client_init(Int) returns (Int);
+
+    rpc lock_acquire(lock_args) returns (Response);
+
+    rpc lock_release(lock_args) returns (Response);
+
+    rpc file_append(file_args) returns (Response);
+
+    rpc client_close(Int) returns (Int);
+}
+
+
 // lock acquire/release arguments, add any fields you want
 message lock_args {
     int32 client_id = 1;
@@ -14,9 +27,10 @@ enum Status {
     FIlE_ERROR = 1;    
 }
 
-// response struct, adjust or add any fields you want
+// Message is added to include more info
 message Response {
     Status status = 1;
+    string message = 2;
 }
 
 // file append arguments, add any fields you want
@@ -29,12 +43,4 @@ message file_args {
 // field to hold an int, because the arguments and return values should be "message" type
 message Int {
     int32 rc = 1;
-}
-
-service LockService {
-    rpc client_init(Int) returns (Int);
-    rpc lock_acquire(lock_args) returns (Response);
-    rpc lock_release(lock_args) returns (Response);
-    rpc file_append(file_args) returns (Response);
-    rpc client_close(Int) returns (Int);
 }
